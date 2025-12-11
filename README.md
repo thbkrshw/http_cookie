@@ -50,6 +50,18 @@ req =
 %{private: %{cookie_jar: updated_jar}} = Req.get!(req, url: "/two", cookie_jar: updated_jar)
 ```
 
+You can also use a server to manage the cookies jar with `HttpCookie.ReqServerPlugin`:
+
+```elixir
+{:ok, server_pid} = HttpCookie.Jar.Server.start_link()
+
+req =
+  Req.new(base_url: "https://example.com")
+  |> HttpCookie.ReqServerPlugin.attach(jar_server: server_pid)
+
+Req.get!(req, url: "/one")
+```
+
 ### Usage with `Tesla`
 
 HttpCookie can be used with [Tesla](https://github.com/elixir-tesla/tesla) to automatically set and parse cookies in HTTP requests:
